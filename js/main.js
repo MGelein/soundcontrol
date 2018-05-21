@@ -74,7 +74,7 @@ function parseTrackData(){
         //Create the button element and add it to the HTML
         var button = buttonTemplate.replace(/%ID%/g, track.id);
         button = button.replace(/%TITLE%/g, track.title);
-        button = button.replace(/%START%/g, track.start);
+        button = button.replace(/START/g, track.start);
         buttonHTML += button;
     });
     //Now add all the HTML to the DOM
