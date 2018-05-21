@@ -1,0 +1,22 @@
+{
+  "name": "soundcontrol",
+  "version": "1.0.0",
+  "description": "DND Ambient Sound Control",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MGelein/soundcontrol.git"
+  },
+  "author": "Mees Gelein",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/MGelein/soundcontrol/issues"
+  },
+  "homepage": "https://github.com/MGelein/soundcontrol#readme",
+  "devDependencies": {
+    "electron": "^2.0.1"
+  }
+}
