@@ -84,7 +84,7 @@ function parseTrackData(data){
     });
     //Now add all the HTML to the DOM
     $('#audioHolder').html(audioHTML);
-    $('#buttonHolder').html(buttonHTML);
+    $('#buttonHolder').append(buttonHTML);
 
     //With the HTML added to the DOM we can finally make the BG color adjustments
     $.each(tracks, function(index, track){
