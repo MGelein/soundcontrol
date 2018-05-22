@@ -126,6 +126,9 @@ function parseTrackData(data){
  * Called to reset all audio parameters and be ready to start
  */
 function init(){
+    //Show the rows using a fade
+    $('.row').fadeIn(2000);
+
     //Stop playing all files just to be sure
     $('audio').each(function(index, track){
         track.currentTime = 0;
@@ -161,11 +164,14 @@ function init(){
  * Update handler, will handle audio automation animation and easing
  */
 function update(){
+    //For every audio track, keep track of the volume and ease to target volume
     $('audio').each(function(index, track){
         var diff = track.targetVolume - track.volume;
         if(Math.abs(diff) < 0.01) track.volume = track.targetVolume;
         track.volume = constrain(track.volume + diff * volumeEaseFactor, 0, 1);
     });
+    
+    //Update animation if necessary, be default 1 in every 3 frames we update
     frameCounter ++;
     if(frameCounter > 1){
         frameCounter = 0;

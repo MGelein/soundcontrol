@@ -3,7 +3,7 @@ const path = require('path')
 const url = require('url')
 
 /**
- * Creates the window
+ * Creates the window, this is the main process for the electron app
  */
 function createWindow() {
     // Create the browser window.
