@@ -3,10 +3,24 @@
 /***If we are currently playing any audio. Set to false in init */
 var playing = false;
 
+//Used to handle animation frames, the FPS of animations is waay below the FPS for audio fades. (a 1/3 to be exact);
+var frameCounter = 0;
+
 /**The different fade speeds, before they are overwritten by the settings INI */
 var SLOW_FADE = 0.03;
 var MED_FADE = 0.1;
 var FAST_FADE = 0.25;
+
+/**The default volume ease factor is 0.1, this is a medium fade */
+var volumeEaseFactor = MED_FADE;
+
+/**Below are the 3 different volume icons depending on the amount of volume that tracks is making */
+var noVolume = '<i class="fas fa-volume-off"></i>';
+var halfVolume = '<i class="fas fa-volume-down"></i>';
+var fullVolume = '<i class="fas fa-volume-up"></i>';
+
+/**List of tracks */
+var tracks = [];
 
 /**The component Templates */
 var audioTemplate = "";
@@ -14,6 +28,7 @@ var buttonTemplate = "";
 
 /**Link to Node JS filesystem */
 var fs = require("fs");
+var settings;
 
 /**
  * Entry point
@@ -25,21 +40,36 @@ $(document).ready(function(){
     buttonTemplate = $('#buttonTemplate').html();
     $('#buttonTemplate').remove();
 
+    //Read the settings file
+    fs.readFile("settings.ini", "utf-8", function(err, data){
+        settings = new Ini(data);
+        parseSettings();
+    });
+
     //First parse the track data
     fs.readFile("data/tracks.csv", "utf-8", function(err, data){
         parseTrackData(data);
         //Then prepare to start
         init();
+        //And start the update interval
         setInterval(update, 100);
     })
 
 });
 
-
-/**List of tracks */
-var tracks = [];
 /**
- * Starts loading the track data from the hidden embedded iframe
+ * Parse all program settings in this list
+ */
+function parseSettings(){
+    if(settings.get('background')){
+        $('body').attr('style', 'background-image:url(' + settings.get('background') + ');');
+    }
+}
+
+
+/**
+ * Starts loading the track data from the provided as param data
+ * @param {String} data the data from the file, utf-8
  */
 function parseTrackData(data){
     //Read the data and split the lines, every line is a track
@@ -97,7 +127,6 @@ function parseTrackData(data){
  */
 function init(){
     //Stop playing all files just to be sure
-    console.log($('audio'));
     $('audio').each(function(index, track){
         track.currentTime = 0;
         track.volume = 0;
@@ -127,16 +156,6 @@ function init(){
         }
     });
 }
-
-var noVolume = '<i class="fas fa-volume-off"></i>';
-var halfVolume = '<i class="fas fa-volume-down"></i>';
-var fullVolume = '<i class="fas fa-volume-up"></i>';
-
-//Used to handle animation frames, the FPS of animations is waay below the FPS for audio fades. (a 1/3 to be exact);
-var frameCounter = 0;
-
-/**The default volume ease factor is 0.1, this is a medium fade */
-var volumeEaseFactor = MED_FADE;
 
 /**
  * Update handler, will handle audio automation animation and easing
