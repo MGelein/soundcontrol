@@ -1,2 +1,5 @@
-data
+data/*.mp3
+data/*.wav
+data/*.ogg
+data/*.mp4
 node_modules
