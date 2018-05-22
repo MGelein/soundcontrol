@@ -17,48 +17,7 @@
 </head>
 
 <body class="container">
-
-	<!-- 
-	================================================================
-	BELOW IS THE TRACK DATA YOU NEED TO EDIT,
-	please remain within the <pre id="tracks"> and the </pre> tags,
-	ignore the rest of the code, unless you now what you are doing.
-	================================================================
--->
-<pre id="tracks">
-#dc3545, Combat, combat.mp3, 0
-#dc3545, Battle, battle.mp3, 0
-#dc3545, Boss, boss.mp3, 0
-#dc3545, Boss II, boss2.mp3, 0
-#dc3545, Boss III, boss3.mp3, 1
-#bf29c6, Magic, magic.mp3, -1
-#17a2b8, Day, day.mp3, -1
-#744406, Dungeon, dungeon.mp3, -1
-#744406, Cave, cave.mp3, -1
-#744406, Swamp, swamp.mp3, -1
-#28a745, Forest, forest.mp3, -1
-#343a40, Interior, creepy_interior.mp3, -1
-#343a40, Ritual, ritual.mp3, -1
-#343a40, Night, night.mp3, -1
-#868e96, Rain, rain.mp3, -1
-#28a745, Jungle, jungle.mp3, -1
-#bf29c6, Taverns, taverns.mp3, -1
-#bf29c6, Inns, inns.mp3, -1
-#bf29c6, Quiet Inn, quiet_tavern.mp3, -1
-#ffc107, Towns, towns.mp3, -1
-#17a2b8, Beach, beach.mp3, -1
-#17a2b8, Ship, ship.mp3, -1
-#17a2b8, Ocean, ocean.mp3, -1
-</pre>
-
-	<!--
-	======================================================
-	YOU CAN SAFELY IGNORE ANYTHING BELOW
-	Below you will find only HTML code and script embeds,
-	if this means something to you and you have the hubris
-	to mess with it, go ahead, but do so at you own risk!
-	=======================================================
--->
+	
 	<div id="audioHolder">
 	</div>
 
@@ -95,8 +54,10 @@
 			</button>
 		</div>
 	</div>
+	<script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
 	<script src="js/lib/jquery-3.2.1.min.js"></script>
 	<script src="js/soundcontrol.js"></script>
+	<script>if (window.module) module = window.module;</script>
 </body>
 
 </html>

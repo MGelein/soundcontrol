@@ -12,6 +12,9 @@ var FAST_FADE = 0.25;
 var audioTemplate = "";
 var buttonTemplate = "";
 
+/**Link to Node JS filesystem */
+var fs = require("fs");
+
 /**
  * Entry point
  */
@@ -23,21 +26,23 @@ $(document).ready(function(){
     $('#buttonTemplate').remove();
 
     //First parse the track data
-    parseTrackData();
+    fs.readFile("data/tracks.csv", "utf-8", function(err, data){
+        parseTrackData(data);
+        //Then prepare to start
+        init();
+        setInterval(update, 100);
+    })
 
-    //Then prepare to start
-    init();
-    setInterval(update, 100);
 });
+
 
 /**List of tracks */
 var tracks = [];
 /**
  * Starts loading the track data from the hidden embedded iframe
  */
-function parseTrackData(){
+function parseTrackData(data){
     //Read the data and split the lines, every line is a track
-    var data = $('#tracks').html();
     var lines = data.split("\n");
 
     //Now go through every line and create a track object
@@ -92,6 +97,7 @@ function parseTrackData(){
  */
 function init(){
     //Stop playing all files just to be sure
+    console.log($('audio'));
     $('audio').each(function(index, track){
         track.currentTime = 0;
         track.volume = 0;
@@ -112,7 +118,7 @@ function init(){
                 volumeEaseFactor = SLOW_FADE;
             break;
             case 'fastFade':
-                volumeEaseFacto = FAST_FADE;
+                volumeEaseFactor = FAST_FADE;
             break;
             case 'mediumFade':
                 volumeEaseFactor = MED_FADE;
@@ -188,11 +194,4 @@ function playTrack(track, startPos){
  */
 function constrain(val, min, max){
     return Math.max(Math.min(max, val), min);
-}
-
-/**
- * Set up the handler of the data loading
- */
-window.onmessage = function(event){
-    console.log(event.data);
 }
