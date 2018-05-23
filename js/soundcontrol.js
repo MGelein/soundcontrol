@@ -246,13 +246,15 @@ function playTrack(track, startPos){
         //If we are not playing yet, first play all tracks
         $('audio').each(function(index, track){ track.play();});
     }
+    //Get the track we're talking about
+    var chosenTrack = $('#' + track + "Sound").get(0);
+    let alreadyPlaying = chosenTrack.targetVolume == 1;
     //Now set all targetVolumes to 0
     $('audio').each(function(index, track){ track.targetVolume = 0;});
-
-    //Only allow the chosen one to play
-    var chosenTrack = $('#' + track + "Sound").get(0);
-    chosenTrack.targetVolume = 1;
-	if(startPos && startPos != -1){
+    
+    //Only allow the chosen one to play, if it is already playing, mute it
+    chosenTrack.targetVolume = alreadyPlaying ? 0: 1;
+	if(startPos && startPos != -1 && !alreadyPlaying){
 		chosenTrack.currentTime = startPos;
 	}
 }
