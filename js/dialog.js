@@ -41,7 +41,8 @@ function showSaveDialog(callback){
  */
 function handleLoadButton(){
     showOpenDialog(function(filepaths){
-        console.log(filepaths);
+        //Start loading the file
+        if(filepaths && filepaths.length > 0) loadTrackdata(filepaths[0]);
     });
 }
 
@@ -50,6 +51,17 @@ function handleLoadButton(){
  */
 function handleSaveButton(){
     showSaveDialog(function(filepaths){
-        console.log(filepaths);
+        //Convert the tracks array into a CSV file
+        var content = "";
+        $.each(tracks, function(index, track){
+            content += track.backgroundColor + ", " + track.title + ", " + track.file + ", " + track.start + "\n";
+        });
+        //Now save that content to the provided filepath if it is valid
+        if(filepaths && filepaths.length > 0){
+            fs.writeFile(filepaths, content, function(err){
+                if(!err) console.log("File saved succesfully: " + filepaths);
+                else console.log("Something went wrong trying to save the file: " + filepaths);
+            }); 
+        }
     });
 }
