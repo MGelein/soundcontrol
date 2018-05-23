@@ -18,6 +18,8 @@ var volumeEaseFactor = MED_FADE;
 var noVolume = '<i class="fas fa-volume-off"></i>';
 var halfVolume = '<i class="fas fa-volume-down"></i>';
 var fullVolume = '<i class="fas fa-volume-up"></i>';
+var dropdownItem = '<a class="dropdown-item" href="#">%URL%</a>';
+var buttonHeader= '<div class="col-sm-12"><h2 class="text-center">Background Audio</h2></div>';
 
 /**List of tracks */
 var tracks = [];
@@ -92,6 +94,18 @@ function loadTrackdata(url){
     });
     //Now set recent files, excluding the one we already loaded
     let recent = settings.get('recent');
+    var newList = "";
+    $.each(recent, function(index, value){
+        if(value == url) return; //Skip this one
+        let dropdown = dropdownItem.replace(/%URL%/g, value);
+        newList += dropdown;
+    });
+    //Now set the newlist as content for the dropdown filename menu
+    $('#recentFiles').html(newList);
+    //Rebind the listeners
+    $('#recentFiles a').unbind('click').click(function(){
+        loadTrackdata($(this).text());
+    });
 }
 
 /**
@@ -101,6 +115,8 @@ function loadTrackdata(url){
 function parseTrackData(data){
     //Read the data and split the lines, every line is a track
     var lines = data.split("\n");
+    //Empty tracks array
+    tracks = [];
 
     //Now go through every line and create a track object
     $.each(lines, function(index, line){
@@ -141,7 +157,7 @@ function parseTrackData(data){
     });
     //Now add all the HTML to the DOM
     $('#audioHolder').html(audioHTML);
-    $('#buttonHolder').append(buttonHTML);
+    $('#buttonHolder').html(buttonHeader + buttonHTML);
 
     //With the HTML added to the DOM we can finally make the BG color adjustments
     $.each(tracks, function(index, track){
