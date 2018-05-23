@@ -80,6 +80,8 @@ function loadTrackdata(url){
     console.log("loadTrackData: ", url);
     //Trim any unnecesary whitespace
     url = url.trim();
+    //Set the name in the UI
+    $('#filename').html(url);
     //Start reading from disk
     fs.readFile(url, "utf-8", function(err, data){
         parseTrackData(data);
@@ -88,6 +90,8 @@ function loadTrackdata(url){
         //And start the update interval
         setInterval(update, 100);
     });
+    //Now set recent files, excluding the one we already loaded
+    let recent = settings.get('recent');
 }
 
 /**

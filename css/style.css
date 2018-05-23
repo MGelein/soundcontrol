@@ -34,6 +34,14 @@ span{
     color: white;
 }
 
+.btn-group.special {
+    display: flex;
+}
+
+.special .btn {
+    flex: 1
+}
+
 .btn:hover{
     opacity: 0.9;
     box-shadow: 0px 0px 10px white;
@@ -44,6 +52,15 @@ span{
     color: black;
 }
 
+.dropdown-menu{
+    background-color: rgba(255, 255, 255, 0.6);
+    border-color: white;
+}
+
 #tracks{
     display: none;
+}
+
+#filename:hover{
+    opacity: 0.8;
 }
