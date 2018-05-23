@@ -26,8 +26,7 @@ var tracks = [];
 var audioTemplate = "";
 var buttonTemplate = "";
 
-/**Link to Node JS filesystem */
-const fs = require("fs");
+/**Ini object */
 var settings;
 
 /**
@@ -46,15 +45,6 @@ $(document).ready(function(){
         parseSettings();
     });
 
-    //First parse the track data
-    fs.readFile("data/tracks.csv", "utf-8", function(err, data){
-        parseTrackData(data);
-        //Then prepare to start
-        init();
-        //And start the update interval
-        setInterval(update, 100);
-    })
-
 });
 
 /**
@@ -64,8 +54,41 @@ function parseSettings(){
     if(settings.get('background')){
         $('body').attr('style', 'background-image:url(' + settings.get('background') + ');');
     }
+
+    //Check to see what file should be loaded
+    let mostRecent = "";
+    if(settings.get('recent')){
+        let recent = settings.get('recent');
+        //If this is an array, split it as one
+        if(recent.indexOf(',') != -1) recent = recent.split(',');
+        //Now save back the parsed array
+        settings.set('recent', recent);
+        //And set the first one as being the most recent
+        mostRecent = (Array.isArray(recent)) ? recent[0]: recent;
+    }else{//If no recent was set, please load default
+        mostRecent = "data/default.csv";
+    }
+    //Load the most recent track data
+    loadTrackdata(mostRecent);
 }
 
+/**
+ * Starts the lodaing process for the provided file location
+ * of soundboard track data
+ */
+function loadTrackdata(url){
+    console.log("loadTrackData: ", url);
+    //Trim any unnecesary whitespace
+    url = url.trim();
+    //Start reading from disk
+    fs.readFile(url, "utf-8", function(err, data){
+        parseTrackData(data);
+        //Then prepare to start
+        init();
+        //And start the update interval
+        setInterval(update, 100);
+    });
+}
 
 /**
  * Starts loading the track data from the provided as param data

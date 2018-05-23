@@ -47,7 +47,9 @@ function Ini(data){
         const keys = Object.keys(this.holder);
         var result = "";
         for(var i = 0; i < keys.length; i++){
-            result += keys[i] + "=" + this.holder[keys[i]] + "\n";
+            let value = this.holder[keys[i]];
+            if(Array.isArray(value)) value = value.join(",");
+            result += keys[i] + "=" + value + "\n";
         }
         return result;
     }
