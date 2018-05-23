@@ -22,6 +22,7 @@ function showOpenDialog(callback){
         properties: ["openFile"]
     }, callback);
 }
+
 /**
  * Shows the standard save dialog for SoundControl
  * @param {Function} callback is called once the file has been selected for saving. Param is filneames array
