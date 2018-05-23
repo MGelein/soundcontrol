@@ -27,7 +27,7 @@ var audioTemplate = "";
 var buttonTemplate = "";
 
 /**Link to Node JS filesystem */
-var fs = require("fs");
+const fs = require("fs");
 var settings;
 
 /**

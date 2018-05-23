@@ -1,3 +1,4 @@
+const fs = require("fs");
 /**
  * Creates a new queryable Ini object from the provided UTF-8 parsed ini file.
  * @param {String} data 
@@ -29,4 +30,37 @@ function Ini(data){
     this.get = function(key){
         return this.holder[key];
     }
+
+    /**
+     * Sets the provided key to the provided value
+     * @param {String} key 
+     * @param {Any} value 
+     */
+    this.set = function(key, value){
+        this.holder[key] = value;
+    }
+
+    /**
+     * Returns a String representation of the object for saving
+     */
+    this.toString = function(){
+        const keys = Object.keys(this.holder);
+        var result = "";
+        for(var i = 0; i < keys.length; i++){
+            result += keys[i] + "=" + this.holder[keys[i]] + "\n";
+        }
+        return result;
+    }
+
+    /**
+     * Tries to save the ini file to the provided location
+     * @param {String} url 
+     */
+    this.save = function(url){
+        fs.writeFile(url, this.toString(), function(err){
+            if(!err) console.log("Settings file saved succesfully");
+            else console.log("Settings file saved with issues: ", err);
+        });
+    }
+
 }
