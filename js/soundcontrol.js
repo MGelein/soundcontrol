@@ -83,7 +83,7 @@ function loadTrackdata(url){
     //Trim any unnecesary whitespace
     url = url.trim();
     //Set the name in the UI
-    $('#filename').html(url);
+    $('#filename').html(basename(url));
     //Start reading from disk
     fs.readFile(url, "utf-8", function(err, data){
         parseTrackData(data);
@@ -106,6 +106,9 @@ function loadTrackdata(url){
     $('#recentFiles a').unbind('click').click(function(){
         loadTrackdata($(this).text());
     });
+
+    //Reset the last opened board in the settings
+    settings.set('mostRecent', resolve(url));
 }
 
 /**
@@ -171,6 +174,10 @@ function parseTrackData(data){
 function init(){
     //Show the rows using a fade
     $('.row').fadeIn(2000);
+
+    //Bind the event handlers to the save and load buttons
+    $('#saveButton').unbind('click').click(handleSaveButton);
+    $('#loadButton').unbind('click').click(handleLoadButton);
 
     //Stop playing all files just to be sure
     $('audio').each(function(index, track){

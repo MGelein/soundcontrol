@@ -38,6 +38,8 @@ function Ini(data){
      */
     this.set = function(key, value){
         this.holder[key] = value;
+        //Overwrite save file everytime we get set
+        this.save('settings.ini');
     }
 
     /**
