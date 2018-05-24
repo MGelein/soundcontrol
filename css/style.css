@@ -101,6 +101,10 @@ CUSTOM CLASSES
     border-top-right-radius: 0.5em;
 }
 
+.buttonTitle{
+    min-width: 2px;
+}
+
 
 /**
 ID's

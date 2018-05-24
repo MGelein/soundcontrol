@@ -66,7 +66,8 @@
 	</div>
 	<div id="buttonTemplate" style="display: none;">
 		<div class="col-sm-2">
-			<button id="%ID%Button" onclick="playTrack('%ID%', START)" class="btn btn-music btn-lg btn-block">%TITLE%&nbsp;
+			<button id="%ID%Button" onclick="playTrack('%ID%', START)" class="btn btn-music btn-lg btn-block">
+				<span class="buttonTitle">%TITLE%</span>&nbsp;
 				<span id="%ID%Volume"></span>
 			</button>
 		</div>
@@ -74,10 +75,10 @@
 
 	<div id="contextmenu" style="display:none;">
 		<ul>
-			<li class="cmenu-link"><a href="#"><i class="fas fa-heading"></i>&nbsp;Change Title</a></li>
-			<li class="cmenu-link"><a href="#"><i class="fas fa-paint-brush"></i>&nbsp;Change Color</a></li>
-			<li class="cmenu-link"><a href="#"><i class="fas fa-music"></i>&nbsp;Change Music File</a></li>
-			<li class="cmenu-link"><a href="#"><i class="fas fa-trash-alt"></i>&nbsp;Remove Button</a></li>
+			<li class="cmenu-link" id="changeTitle"><a href="#"><i class="fas fa-heading"></i>&nbsp;Change Title</a></li>
+			<li class="cmenu-link" id="changeColor"><a href="#"><i class="fas fa-paint-brush"></i>&nbsp;Change Color</a></li>
+			<li class="cmenu-link" id="changeMusic"><a href="#"><i class="fas fa-music"></i>&nbsp;Change Music File</a></li>
+			<li class="cmenu-link" id="removeButton"><a href="#"><i class="fas fa-trash-alt"></i>&nbsp;Remove Button</a></li>
 		</ul>
 	</div>
 	<script>if (typeof module === 'object') { window.module = module; module = undefined; }</script>

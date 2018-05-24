@@ -1,14 +1,14 @@
 /**Require access to the file dialogs from the system*/
-const {dialog} = require('electron').remote;
-const {resolve, basename} = require('path');
+const { dialog } = require('electron').remote;
+const { resolve, basename } = require('path');
 
 /**The file type filter for the loading of files in this application */
 const filters = [
-    {name: 'SoundControl CSV', extensions: ['csv']}
+    { name: 'SoundControl CSV', extensions: ['csv'] }
 ];
 /**The file type filter for the loading of music files */
 const music_filters = [
-    {name: 'SoundControl Music', extensions: ['mp3', 'wav', 'wma', 'ogg']}
+    { name: 'SoundControl Music', extensions: ['mp3', 'wav', 'wma', 'ogg'] }
 ];
 
 /**
@@ -16,7 +16,7 @@ const music_filters = [
  * for this application.
  * @param {Function} callback the function that is called once files have been seleted. Param is filename array.
  */
-function showOpenDialog(callback){
+function showOpenDialog(callback) {
     var mRecent = settings.get('mostRecent');
     mRecent = mRecent.replace(basename(mRecent), '');
     dialog.showOpenDialog({
@@ -31,7 +31,7 @@ function showOpenDialog(callback){
  * Shows the music file loading dialog.
  * @param {Function} callback 
  */
-function showLoadMusicDialog(callback){
+function showLoadMusicDialog(callback) {
     var mRecent = settings.get('mostRecent');
     mRecent = mRecent.replace(basename(mRecent), '');
     dialog.showOpenDialog({
@@ -46,7 +46,7 @@ function showLoadMusicDialog(callback){
  * Shows the standard save dialog for SoundControl
  * @param {Function} callback is called once the file has been selected for saving. Param is filneames array
  */
-function showSaveDialog(callback){
+function showSaveDialog(callback) {
     var mRecent = settings.get('mostRecent');
     mRecent = mRecent.replace(basename(mRecent), '');
     dialog.showSaveDialog({
@@ -59,38 +59,47 @@ function showSaveDialog(callback){
 /**
  * Called when the load button is clicked
  */
-function handleLoadButton(){
-    showOpenDialog(function(filepaths){
+function handleLoadButton() {
+    showOpenDialog(function (filepaths) {
         //Start loading the file
-        if(filepaths && filepaths.length > 0) loadTrackdata(filepaths[0]);
+        if (filepaths && filepaths.length > 0) loadTrackdata(filepaths[0]);
     });
 }
 
 /**
  * Called when the save button is pressed
  */
-function handleSaveButton(){
-    showSaveDialog(function(filepaths){
-        //Convert the tracks array into a CSV file
-        var content = "";
-        $.each(tracks, function(index, track){
-            content += track.backgroundColor + ", " + track.title + ", " + track.file + ", " + track.start + "\n";
-        });
+function handleSaveButton() {
+    showSaveDialog(function (filepaths) {
         //Now save that content to the provided filepath if it is valid
-        if(filepaths && filepaths.length > 0){
-            fs.writeFile(filepaths, content, function(err){
-                if(!err) console.log("File saved succesfully: " + filepaths);
-                else console.log("Something went wrong trying to save the file: " + filepaths);
-            }); 
+        if (filepaths && filepaths.length > 0) {
+           saveTracksToFile(filepaths);
         }
+    });
+}
+
+/**
+ * Saves the tracks array as a CSV to the provided location on disk
+ * @param {String} url 
+ */
+function saveTracksToFile(url) {
+    //Convert the tracks array into a CSV file
+    var content = "";
+    $.each(tracks, function (index, track) {
+        content += track.backgroundColor + ", " + track.title + ", " + track.file + ", " + track.start + "\n";
+    });
+    //Now write the file to the URL
+    fs.writeFile(url, content, function (err) {
+        if (!err) console.log("File saved succesfully: " + url);
+        else console.log("Something went wrong trying to save the file: " + url);
     });
 }
 
 /**
  * This function is called when the addMusicButton is clicked.
  */
-function handleAddMusicButton(){
-    showLoadMusicDialog(function(filepaths){
+function handleAddMusicButton() {
+    showLoadMusicDialog(function (filepaths) {
         console.log(filepaths);
     });
 }
