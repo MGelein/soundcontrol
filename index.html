@@ -66,16 +66,26 @@
 	</div>
 	<div id="buttonTemplate" style="display: none;">
 		<div class="col-sm-2">
-			<button id="%ID%Button" onclick="playTrack('%ID%', START)" class="btn btn-lg btn-block">%TITLE%&nbsp;
+			<button id="%ID%Button" onclick="playTrack('%ID%', START)" class="btn btn-music btn-lg btn-block">%TITLE%&nbsp;
 				<span id="%ID%Volume"></span>
 			</button>
 		</div>
+	</div>
+
+	<div id="contextmenu" style="display:none;">
+		<ul>
+			<li class="cmenu-link"><a href="#"><i class="fas fa-heading"></i>&nbsp;Change Title</a></li>
+			<li class="cmenu-link"><a href="#"><i class="fas fa-paint-brush"></i>&nbsp;Change Color</a></li>
+			<li class="cmenu-link"><a href="#"><i class="fas fa-music"></i>&nbsp;Change Music File</a></li>
+			<li class="cmenu-link"><a href="#"><i class="fas fa-trash-alt"></i>&nbsp;Remove Button</a></li>
+		</ul>
 	</div>
 	<script>if (typeof module === 'object') { window.module = module; module = undefined; }</script>
 	<script src="js/lib/jquery-3.2.1.min.js"></script>
 	<script src="js/lib/bootstrap.bundle.min.js"></script>
 	<script src="js/dialog.js"></script>
 	<script src="js/ini.js"></script>
+	<script src="js/context.js"></script>
 	<script src="js/soundcontrol.js"></script>
 	<script>if (window.module) module = window.module;</script>
 </body>

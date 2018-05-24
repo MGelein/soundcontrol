@@ -89,7 +89,7 @@ function loadTrackdata(url){
         setInterval(update, 100);
     });
     //Now set recent files, excluding the one we already loaded
-    let recent = settings.get('recent').split(',');
+    let recent = Array.isArray(settings.get('recent')) ? settings.get('recent'): settings.get('recent').split(',');
     settings.set('recent', recent);
     var newList = "";
     $.each(recent, function(index, value){
@@ -162,6 +162,11 @@ function parseTrackData(data){
     //With the HTML added to the DOM we can finally make the BG color adjustments
     $.each(tracks, function(index, track){
         $('#' + track.id + "Button").attr('style', 'background-color:' + track.backgroundColor + ';');
+    });
+
+    //And let's add a right click listener
+    $('.btn-music').unbind('contextmenu').contextmenu(function(){
+        showContextmenu(this);
     });
 }
 
