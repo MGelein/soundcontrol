@@ -6,6 +6,10 @@ const {resolve, basename} = require('path');
 const filters = [
     {name: 'SoundControl CSV', extensions: ['csv']}
 ];
+/**The file type filter for the loading of music files */
+const music_filters = [
+    {name: 'SoundControl Music', extensions: ['mp3', 'wav', 'wma', 'ogg']}
+];
 
 /**
  * Shows the standard load/open dialog, at least, 'standard'
@@ -19,6 +23,21 @@ function showOpenDialog(callback){
         title: "Load a SoundControl CSV file",
         defaultPath: resolve(mRecent),
         "filters": filters,
+        properties: ["openFile"]
+    }, callback);
+}
+
+/**
+ * Shows the music file loading dialog.
+ * @param {Function} callback 
+ */
+function showLoadMusicDialog(callback){
+    var mRecent = settings.get('mostRecent');
+    mRecent = mRecent.replace(basename(mRecent), '');
+    dialog.showOpenDialog({
+        title: "Load a SoundControl Music File",
+        defaultPath: resolve(mRecent),
+        "filters": music_filters,
         properties: ["openFile"]
     }, callback);
 }
@@ -64,5 +83,14 @@ function handleSaveButton(){
                 else console.log("Something went wrong trying to save the file: " + filepaths);
             }); 
         }
+    });
+}
+
+/**
+ * This function is called when the addMusicButton is clicked.
+ */
+function handleAddMusicButton(){
+    showLoadMusicDialog(function(filepaths){
+        console.log(filepaths);
     });
 }

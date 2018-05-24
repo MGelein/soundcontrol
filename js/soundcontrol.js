@@ -20,7 +20,8 @@ var halfVolume = '<i class="fas fa-volume-down"></i>';
 var fullVolume = '<i class="fas fa-volume-up"></i>';
 var dropdownItem = '<a class="dropdown-item" href="#">%URL%</a>';
 var buttonHeader= '<div class="col-sm-12"><h2 class="text-center">Background Audio</h2></div>';
-var addButton = '<div id="addButtonHolder" class="col-sm-2 text-center"><a href="#" id="addButton"><i class="fas fa-plus"></i></a></div>';
+var addButton = '<div class="col-sm-2"><button id="addMusicButton" type="button" class="btn btn-outline-secondary btn-block btn-lg">'
++ '<i class="fas fa-plus-square"></i></button></div>';
 
 /**List of tracks */
 var tracks = [];
@@ -60,14 +61,8 @@ function parseSettings(){
 
     //Check to see what file should be loaded
     let mostRecent = "";
-    if(settings.get('recent')){
-        let recent = settings.get('recent');
-        //If this is an array, split it as one
-        if(recent.indexOf(',') != -1) recent = recent.split(',');
-        //Now save back the parsed array
-        settings.set('recent', recent);
-        //And set the first one as being the most recent
-        mostRecent = (Array.isArray(recent)) ? recent[0]: recent;
+    if(settings.get('mostRecent')){
+        mostRecent = settings.get('mostRecent');
     }else{//If no recent was set, please load default
         mostRecent = "data/default.csv";
     }
@@ -94,7 +89,8 @@ function loadTrackdata(url){
         setInterval(update, 100);
     });
     //Now set recent files, excluding the one we already loaded
-    let recent = settings.get('recent');
+    let recent = settings.get('recent').split(',');
+    settings.set('recent', recent);
     var newList = "";
     $.each(recent, function(index, value){
         if(value == url) return; //Skip this one
@@ -179,6 +175,9 @@ function init(){
     //Bind the event handlers to the save and load buttons
     $('#saveButton').unbind('click').click(handleSaveButton);
     $('#loadButton').unbind('click').click(handleLoadButton);
+
+    //Bind the event to the load music button
+    $('#addMusicButton').unbind('click').click(handleAddMusicButton);
 
     //Stop playing all files just to be sure
     $('audio').each(function(index, track){
