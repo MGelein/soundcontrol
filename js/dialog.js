@@ -57,6 +57,18 @@ function showSaveDialog(callback) {
 }
 
 /**
+ * This function shows the confirmation dialog after you indicated
+ * you want to remove a button
+ */
+function showRemoveConfirmation(callback){
+    dialog.showMessageBox({
+        title: "SoundControl: Are You Sure?",
+        message: "Are you sure you want to remove this button? This cannot be undone!",
+        buttons: ["Yes", "No"]
+    }, callback);
+}
+
+/**
  * Called when the load button is clicked
  */
 function handleLoadButton() {

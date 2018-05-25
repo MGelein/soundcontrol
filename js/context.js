@@ -106,6 +106,39 @@ function showContextmenu(element){
 
         });
     });
+
+    //Add the listener for the removeButton functionality
+    $('#removeButton').unbind('click').click(function(ev){
+        //Set the action
+        currentContextAction = REMOVE_BUTTON;
+        //Get the id of the target
+        var bId = "#" + currentContextItem.id;
+        //Hide the menu, we're done with it
+        hideContextMenu();
+        //Prevent the click from triggering other stuff
+        ev.stopPropagation();
+        //Show the confirmation button
+        showRemoveConfirmation(function(buttonIndex){
+            if(buttonIndex == 0){
+                //Remove the button
+                $(bId).parent().remove();
+                //Now also remove the button from the tracks list
+                bId = bId.replace('Button', '').replace('#', '');
+                var foundIndex = -1;
+                $.each(tracks, function(index, track){
+                    if(track.id == bId){
+                        foundIndex = index;
+                    }
+                });
+                //Remove the found Index
+                tracks.splice(foundIndex, 1);
+                //Save back to disk
+                saveTracksToFile(settings.get('mostRecent'));
+            }else{
+                //Don't remove the button, do nothing
+            }
+        });
+    });
 }
 
 /**
