@@ -75,6 +75,37 @@ function showContextmenu(element){
             }
         });
     });
+
+    //Add the listener for changeColor functionality
+    $('#changeColor').unbind('click').click(function(ev){
+        //Set the action
+        currentContextAction = CHANGE_COLOR;
+        //Get the id of the target
+        var bId = "#" + currentContextItem.id;
+        //Hide the menu, we're done with it
+        hideContextMenu();
+        //Prevent the click from triggering other stuff
+        ev.stopPropagation();
+        //Get the current Color
+        const cColor = $(bId).attr('style').replace('background-color:', '').replace(';', '');
+        //Show the colorPicker and set it to the currentcolor
+        $('#colorPicker').val(cColor).click();
+        $('#colorPicker').unbind('change').change(function(){
+            //Change the color in the dom
+            const color = $('#colorPicker').val();
+            $(bId).attr('style', 'background-color:' + color + ";");
+            //Now save it in the tracks array and write to disk
+            bId = bId.replace('#', '').replace('Button', '');
+            $.each(tracks, function(index, track){
+                if(track.id == bId){
+                    track.backgroundColor = color;
+                    //After the right track has been changed, let's save the result
+                    saveTracksToFile(settings.get('mostRecent'));
+                }
+            });
+
+        });
+    });
 }
 
 /**
