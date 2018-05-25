@@ -134,7 +134,7 @@ function parseTrackData(data){
         track.title = parts[1].trim();
         track.file = parts[2].trim();
         track.start = Number(parts[3].trim());
-        track.id = track.file.replace(/.mp3/g, '').replace(/.wav/g, '').replace(/.ogg/g, '').replace(/.wma/g, '');
+        track.id = basename(resolve(track.file)).replace(/.mp3/g, '').replace(/.wav/g, '').replace(/.ogg/g, '').replace(/.wma/g, '');
         //And push it to the list of tracks
         tracks.push(track);
     });

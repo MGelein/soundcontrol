@@ -31,8 +31,9 @@ function showOpenDialog(callback) {
  * Shows the music file loading dialog.
  * @param {Function} callback 
  */
-function showLoadMusicDialog(callback) {
+function showLoadMusicDialog(callback, file) {
     var mRecent = settings.get('mostRecent');
+    if(file) mRecent = file;//If we are replacing a previous file, show that location
     mRecent = mRecent.replace(basename(mRecent), '');
     dialog.showOpenDialog({
         title: "Load a SoundControl Music File",

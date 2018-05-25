@@ -139,6 +139,27 @@ function showContextmenu(element){
             }
         });
     });
+
+    $('#changeMusic').unbind('click').click(function(ev){
+         //Set the action
+         currentContextAction = REMOVE_BUTTON;
+         //Get the id of the target
+         var bId = currentContextItem.id.replace('Button', '');
+         //Get the file we're changing
+         var changeFile = "";
+         $.each(tracks, function(index, track){
+            if(track.id == bId) changeFile = track.file;
+         });
+         console.log(changeFile);
+         //Hide the menu, we're done with it
+         hideContextMenu();
+         //Prevent the click from triggering other stuff
+         ev.stopPropagation();
+         //Show the load Music file menu
+         showLoadMusicDialog(function(filepaths){
+            console.log(filepaths);
+         }, changeFile);
+    });
 }
 
 /**

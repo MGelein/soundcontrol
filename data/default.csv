@@ -1,3 +1,3 @@
-#f99e17, BATTLE!, combat.mp3, 0
-#bf29c6, Quiet Inn, quiet_tavern.mp3, -1
-#343a40, Interior, creepy_interior.mp3, -1
+#f99e17, BATTLE!, data/combat.mp3, 0
+#bf29c6, Quiet Inn, data/quiet_tavern.mp3, -1
+#343a40, Interior, data/creepy_interior.mp3, -1
