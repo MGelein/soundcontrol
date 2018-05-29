@@ -1,0 +1,23 @@
+#dc3545	 Combat	 data/combat.mp3	 0
+#dc3545	 Battle	 data/battle.mp3	 0
+#dc3545	 Boss	 data/boss.mp3	 0
+#dc3545	 Boss II	 data/boss2.mp3	 0
+#dc3545	 Boss III	 data/boss3.mp3	 1
+#bf29c6	 Magic	 data/magic.mp3	 -1
+#17a2b8	 Day	 data/day.mp3	 -1
+#744406	 Dungeon	 data/dungeon.mp3	 -1
+#744406	 Cave	 data/cave.mp3	 -1
+#744406	 Swamp	 data/swamp.mp3	 -1
+#28a745	 Forest	 data/forest.mp3	 -1
+#343a40	 Interior	 data/creepy_interior.mp3	 -1
+#343a40	 Ritual	 data/ritual.mp3	 -1
+#343a40	 Night	 data/night.mp3	 -1
+#868e96	 Rain	 data/rain.mp3	 -1
+#28a745	 Jungle	 data/jungle.mp3	 -1
+#bf29c6	 Taverns	 data/taverns.mp3	 -1
+#bf29c6	 Inns	 data/inns.mp3	 -1
+#bf29c6	 Quiet Inn	 data/quiet_tavern.mp3	 -1
+#ffc107	 Towns	 data/towns.mp3	 -1
+#17a2b8	 Beach	 data/beach.mp3	 -1
+#17a2b8	 Ship	 data/ship.mp3	 -1
+#17a2b8	 Ocean	 data/ocean.mp3	 -1

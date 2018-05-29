@@ -121,11 +121,11 @@ function parseTrackData(data){
     //Now go through every line and create a track object
     $.each(lines, function(index, line){
         if(line.length < 4) return; //Ignore, not long enough to matter
-        if(line.indexOf(',') == -1) return;//Ignore, no comma's in this line
+        if(line.indexOf('\t') == -1) return;//Ignore, no comma's in this line
         if(line.indexOf('//') == 0) return;//Ignore, this line is a comment
 
         //Split the lines into parts and count the parts
-        var parts = line.split(',');
+        var parts = line.split('\t');
         if(parts.length != 4) return;//Ignore, not enough parts
 
         //Now start reading the parts
@@ -134,7 +134,8 @@ function parseTrackData(data){
         track.title = parts[1].trim();
         track.file = parts[2].trim();
         track.start = Number(parts[3].trim());
-        track.id = basename(resolve(track.file)).replace(/.mp3/g, '').replace(/.wav/g, '').replace(/.ogg/g, '').replace(/.wma/g, '');
+        track.id = basename(resolve(track.file)).replace(/.mp3/g, '').replace(/.wav/g, '')
+        .replace(/.ogg/g, '').replace(/.wma/g, '').replace(/[^a-z0-9]/gmi, '');//Lastly also remove any special characters
         //And push it to the list of tracks
         tracks.push(track);
     });
