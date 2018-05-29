@@ -113,6 +113,6 @@ function saveTracksToFile(url) {
  */
 function handleAddMusicButton() {
     showLoadMusicDialog(function (filepaths) {
-        console.log(filepaths);
+        
     });
 }
