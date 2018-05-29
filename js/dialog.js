@@ -4,7 +4,7 @@ const { resolve, basename } = require('path');
 
 /**The file type filter for the loading of files in this application */
 const filters = [
-    { name: 'SoundControl CSV', extensions: ['csv'] }
+    { name: 'SoundControl TSV', extensions: ['tsv'] }
 ];
 /**The file type filter for the loading of music files */
 const music_filters = [
@@ -20,7 +20,7 @@ function showOpenDialog(callback) {
     var mRecent = settings.get('mostRecent');
     mRecent = mRecent.replace(basename(mRecent), '');
     dialog.showOpenDialog({
-        title: "Load a SoundControl CSV file",
+        title: "Load a SoundControl TSV file",
         defaultPath: resolve(mRecent),
         "filters": filters,
         properties: ["openFile"]
