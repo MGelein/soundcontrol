@@ -4,7 +4,10 @@
   "description": "DND Ambient Sound Control",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "pack:osx": "electron-packager . SoundControl --out=dist/osx --platform=darwin --arch=x64 --icon=build/icon.icns",
+    "pack:win64": "electron-packager . SoundControl --out=dist/ --icon=build/icon.ico",
+    "build": "npm run pack:osx && npm run pack:win64"
   },
   "repository": {
     "type": "git",
@@ -17,6 +20,7 @@
   },
   "homepage": "https://github.com/MGelein/soundcontrol#readme",
   "devDependencies": {
-    "electron": "^2.0.1"
+    "electron": "^2.0.1",
+    "electron-packager": "^12.1.0"
   }
 }
