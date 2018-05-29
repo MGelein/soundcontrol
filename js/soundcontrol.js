@@ -222,7 +222,7 @@ function init(){
 function update(){
     //For every audio track, keep track of the volume and ease to target volume
     $('audio').each(function(index, track){
-        var diff = track.targetVolume - track.volume;
+        var diff = (track.targetVolume || 0) - track.volume;
         if(Math.abs(diff) < 0.01) track.volume = track.targetVolume;
         track.volume = constrain(track.volume + diff * volumeEaseFactor, 0, 1);
     });
