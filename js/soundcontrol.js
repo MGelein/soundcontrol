@@ -81,7 +81,7 @@ function sendRemote(songName){
  */
 function checkRemote(){
     $.get(REMOTE_REQUEST_URL, (data) =>{
-        console.log("We should be playing: " + data);
+        playTrack(data);
     });
     if(remoteControl) setTimeout(checkRemote, REMOTE_UPDATE);
 }
@@ -305,7 +305,7 @@ function playTrack(track, startPos){
     //Only allow the chosen one to play, if it is already playing, mute it
     chosenTrack.targetVolume = alreadyPlaying ? 0: 1;
     if(alreadyPlaying) sendRemote("-");
-    else sendRemote(chosenTrack.title);
+    else sendRemote(track);
 	if(startPos && startPos != -1 && !alreadyPlaying){
 		chosenTrack.currentTime = startPos;
 	}
