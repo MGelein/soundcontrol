@@ -4,8 +4,10 @@
 var playing = false;
 
 /**If we are using remote control */
-const REMOTE_URL = "https://www.interwing.nl/soundcontrol/song.php?song=";
+const REMOTE_SUBMIT_URL = "https://www.interwing.nl/soundcontrol/song.php?song=";
+const REMOTE_REQUEST_URL = "https://www.interwing.nl/soundcontrol/song.txt";
 var remoteControl = false;
+const REMOTE_UPDATE = 2000;
 
 //Used to handle animation frames, the FPS of animations is waay below the FPS for audio fades. (a 1/3 to be exact);
 var frameCounter = 0;
@@ -46,6 +48,7 @@ $(document).ready(function(){
     $('#audioTemplate').remove();
     buttonTemplate = $('#buttonTemplate').html();
     $('#buttonTemplate').remove();
+    $.ajaxSetup({cache:false});
 
     //Read the settings file
     fs.readFile("settings.ini", "utf-8", function(err, data){
@@ -53,7 +56,23 @@ $(document).ready(function(){
         parseSettings();
     });
 
+    $('#rc').change(() =>{
+        remoteControl = !remoteControl;
+        if(remoteControl){
+            checkRemote();
+        }
+    });
 });
+
+/**
+ * This function checks what the remote server is currently playing
+ */
+function checkRemote(){
+    $.get(REMOTE_REQUEST_URL, (data) =>{
+        console.log("We should be playing: " + data);
+    });
+    if(remoteControl) setTimeout(checkRemote, REMOTE_UPDATE);
+}
 
 /**
  * Parse all program settings in this list
