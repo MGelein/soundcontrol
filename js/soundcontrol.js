@@ -7,6 +7,7 @@ var playing = false;
 const REMOTE_SUBMIT_URL = "https://www.interwing.nl/soundcontrol/song.php?song=";
 const REMOTE_REQUEST_URL = "https://www.interwing.nl/soundcontrol/song.txt";
 var remoteControl = false;
+var lastRemoteSong = '!@#$%';
 const REMOTE_UPDATE = 2000;
 
 //Used to handle animation frames, the FPS of animations is waay below the FPS for audio fades. (a 1/3 to be exact);
@@ -81,7 +82,10 @@ function sendRemote(songName){
  */
 function checkRemote(){
     $.get(REMOTE_REQUEST_URL, (data) =>{
-        playTrack(data);
+        if(data !== lastRemoteSong){
+            playTrack(data);
+            lastRemoteSong = data;
+        }
     });
     if(remoteControl) setTimeout(checkRemote, REMOTE_UPDATE);
 }
@@ -296,6 +300,7 @@ function playTrack(track, startPos){
         //If we are not playing yet, first play all tracks
         $('audio').each(function(index, track){ track.play();});
     }
+    if(startPos && remoteControl) return;
     //Get the track we're talking about
     var chosenTrack = $('#' + track + "Sound").get(0);
     let alreadyPlaying = chosenTrack.targetVolume == 1;
