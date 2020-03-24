@@ -65,6 +65,18 @@ $(document).ready(function(){
 });
 
 /**
+ * Sends the current songname to the remote server that registers it
+ * @param {String} songName 
+ */
+function sendRemote(songName){
+    if(!remoteControl){
+        $.get(REMOTE_SUBMIT_URL + songName, ()=>{
+            console.log("Sent request for song " + songName + " to the remote server.");
+        });
+    }
+}
+
+/**
  * This function checks what the remote server is currently playing
  */
 function checkRemote(){
@@ -200,6 +212,8 @@ function parseTrackData(data){
 function init(){
     //Show the rows using a fade
     $('.row').fadeIn(2000);
+    //Set no track to the server
+    sendRemote("-");
 
     //Bind the event handlers to the save and load buttons
     $('#saveButton').unbind('click').click(handleSaveButton);
@@ -290,6 +304,8 @@ function playTrack(track, startPos){
     
     //Only allow the chosen one to play, if it is already playing, mute it
     chosenTrack.targetVolume = alreadyPlaying ? 0: 1;
+    if(alreadyPlaying) sendRemote("-");
+    else sendRemote(chosenTrack.title);
 	if(startPos && startPos != -1 && !alreadyPlaying){
 		chosenTrack.currentTime = startPos;
 	}
