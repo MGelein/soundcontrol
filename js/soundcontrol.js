@@ -3,6 +3,10 @@
 /***If we are currently playing any audio. Set to false in init */
 var playing = false;
 
+/**If we are using remote control */
+const REMOTE_URL = "https://www.interwing.nl/soundcontrol/song.php?song=";
+var remoteControl = false;
+
 //Used to handle animation frames, the FPS of animations is waay below the FPS for audio fades. (a 1/3 to be exact);
 var frameCounter = 0;
 

@@ -20,7 +20,10 @@
   },
   "homepage": "https://github.com/MGelein/soundcontrol#readme",
   "devDependencies": {
-    "electron": "^2.0.1",
-    "electron-packager": "^12.1.0"
+    "electron": "^8.1.1",
+    "electron-packager": "^14.2.1"
+  },
+  "dependencies": {
+    "electron-builder": "^22.4.0"
   }
 }
