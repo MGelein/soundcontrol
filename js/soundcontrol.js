@@ -32,6 +32,7 @@ var addButton = '<div class="col-sm-2"><button id="addMusicButton" type="button"
 
 /**List of tracks */
 var tracks = [];
+var currentTrackDataUrl = "";
 
 /**The component Templates */
 var audioTemplate = "";
@@ -114,14 +115,14 @@ function parseSettings(){
  * of soundboard track data
  */
 function loadTrackdata(url){
-    console.log("loadTrackData: ", url);
+    currentTrackDataUrl = url.replace(basename(url), "");
     //Trim any unnecesary whitespace
     url = url.trim();
     //Set the name in the UI
     $('#filename').html(basename(url));
     //Start reading from disk
     fs.readFile(url, "utf-8", function(err, data){
-        parseTrackData(data);
+        parseTrackData(data, currentTrackDataUrl, "");
         //Then prepare to start
         init();
         //And start the update interval
@@ -151,7 +152,8 @@ function loadTrackdata(url){
  * Starts loading the track data from the provided as param data
  * @param {String} data the data from the file, utf-8
  */
-function parseTrackData(data){
+function parseTrackData(data, baseUrl){
+    console.log("parsing track data: ", data, baseUrl);
     //Read the data and split the lines, every line is a track
     var lines = data.split("\n");
     //Empty tracks array
@@ -171,7 +173,7 @@ function parseTrackData(data){
         var track = {};
         track.backgroundColor = parts[0].trim();
         track.title = parts[1].trim();
-        track.file = parts[2].trim();
+        track.file = baseUrl + parts[2].trim();
         track.start = Number(parts[3].trim());
         track.id = basename(resolve(track.file)).replace(/.mp3/g, '').replace(/.wav/g, '')
         .replace(/.ogg/g, '').replace(/.wma/g, '').replace(/[^a-z0-9]/gmi, '');//Lastly also remove any special characters

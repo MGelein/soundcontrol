@@ -99,7 +99,7 @@ function saveTracksToFile(url, callback) {
     //Convert the tracks array into a CSV file
     var content = "";
     $.each(tracks, function (index, track) {
-        content += track.backgroundColor + "\t" + track.title + "\t" + track.file + "\t" + track.start + "\n";
+        content += track.backgroundColor + "\t" + track.title + "\t" + track.file.replace(currentTrackDataUrl, "") + "\t" + track.start + "\n";
     });
     //Now write the file to the URL
     fs.writeFile(url, content, function (err) {
