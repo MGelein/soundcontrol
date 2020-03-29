@@ -3,74 +3,97 @@ int buttonRows = -1;
 int buttonCols = -1;
 final int GAIN_ON = 0;
 final int GAIN_OFF = -60;
-final float GAIN_EASE = 0.05;
+final float GAIN_EASE = 0.1;
+final PVector buttonExtra = new PVector();
 final PVector buttonMargin = new PVector();
-final PVector buttonSize = new PVector();
+final PVector buttonSize = new PVector(1, 1);
 final PVector headerSize = new PVector();
+final PVector halfBs = new PVector();
+final int lines = 70;
+final int lighterLines = 90;
+final int bgColor = 50;
   
 class MusicButton{
-  PVector targetPos = new PVector();
-  PVector pos = PVector.random2D().mult(1000);
-  PVector acc = new PVector();
-  
+  final PVector pos = new PVector();
   AudioPlayer audio;
   String title = "-";
   String url = null;
+  boolean triedLoading = false;
+  boolean needsUpdate = true;
+  PGraphics buffer;
+  
   color highlight = color(255, 125, 0);
-  color lines = color(70);
-  int lighterLines = 90;
-  color background = color(50);
   boolean hovered = false;
   boolean clicked = false;
-  boolean disabled = false;
+  
   float sizeMult = 0;
   float targetGain = GAIN_OFF;
   float gain = GAIN_OFF;
   float rms = 0;
+  float bw2 = 0;
+  float bh2 = 0;
+  final String hotkey;
+  
+  MusicButton(String hotkey){
+    this.hotkey = hotkey;
+  }
+  
+  void createBuffer(){
+    buffer = createGraphics(int(buttonSize.x * 1.3), int(buttonSize.y * 1.3));
+    bw2 = buffer.width / 2;
+    bh2 = buffer.height / 2;
+  }
   
   void render(){
-    if(url == null) return;
-    
-    disabled = url.length() < 2;
-    if(hovered){
-      sizeMult += ((clicked ? 2 : 1) - sizeMult) * (clicked ? 0.2 : 0.1);
-    }else{
-      sizeMult *= 0.9f;
+    //Stop rendering if no url is specified, and update hover status
+    if(url == null || buffer == null) return;
+    if(hovered && rc.selected) hovered = false;
+    hovered = isUnderMouse();
+    //Update the RMS from playing, this is eased
+    rms = handleGain();
+    if(rms != 0) {
+      if(targetFrameRate < 10) needsUpdate = true;
+      else if(frameCount % 2 == 0) needsUpdate = true;
     }
     
-    if(hovered && rc.selected) hovered = false;
+    //If necessary update the buffer, but render it whatever happens
+    if(needsUpdate) updateRender();
+    image(buffer, pos.x - bw2, pos.y - bh2);    
+  }
+  
+  void updateRender(){
+    buffer.beginDraw();
+    buffer.clear();
+    buffer.rectMode(CENTER);
+    buffer.pushMatrix();
+    buffer.translate(buffer.width / 2, buffer.height / 2);
     
-    rms += (handleGain() - rms) * 0.2;
-        
-    acc.x += (targetPos.x - pos.x) * 0.03;
-    acc.y += (targetPos.y - pos.y) * 0.03;
-    pos.add(acc);
-    acc.mult(0.7);
+    //Size mult makes for a nice highlightColor border around the edge
+    sizeMult = hovered ? (clicked ? 1.3 : 1.1) : 0;
     
-    if(headerSize.y < 1) return;
-    stroke(hovered ? lighterLines : lines);
-    fill(disabled ? 120 : highlight);
-    PVector extra = new PVector(buttonMargin.x / 2, buttonMargin.y / 2);
-    extra.mult(sizeMult);
-    rect(pos.x, pos.y, buttonSize.x + extra.x, buttonSize.y + extra.y, borderRadius);
-    stroke(hovered ? lines : background);
-    fill(hovered ? lines : background);
-    rect(pos.x, pos.y - buttonSize.y / 2 + headerSize.y, buttonSize.x, 10);
-    rect(pos.x, pos.y + headerSize.y / 2, buttonSize.x, buttonSize.y - headerSize.y, borderRadius);
+    //Create the button body, colors and header
+    buffer.stroke(hovered ? (clicked ? colors.white : lighterLines) : lines);
+    buffer.fill(highlight);
+    buffer.rect(0, 0, buttonSize.x + buttonExtra.x * sizeMult, buttonSize.y + buttonExtra.y * sizeMult, borderRadius);
+    buffer.stroke(hovered ? lines : bgColor);
+    buffer.fill(hovered ? lines : bgColor);
+    buffer.rect(0, -halfBs.y + headerSize.y, buttonSize.x, 10);
+    buffer.rect(0, headerSize.y / 2, buttonSize.x, buttonSize.y - headerSize.y, borderRadius);
     
-    textFont(fonts.bold);
-    textSize(headerSize.y / 2);
-    String caption = title;
-    float tw2 = textWidth(caption) / 2;
-    fill(colors.black);
-    text(caption, pos.x - tw2, pos.y - buttonSize.y / 2 + headerSize.y / 1.5 + 2);
-    fill(colors.white);
-    text(caption, pos.x - tw2, pos.y - buttonSize.y / 2 + headerSize.y / 1.5);
+    //Fill the text
+    buffer.textFont(fonts.bold);
+    buffer.textSize(headerSize.y / 2);
+    String caption = "[" + hotkey + "]: " + title;
+    tw2 = buffer.textWidth(caption) / 2;
+    buffer.fill(colors.black);
+    buffer.text(caption, -tw2, -halfBs.y + headerSize.y / 1.7 + 2);
+    buffer.fill(colors.white);
+    buffer.text(caption, -tw2, -halfBs.y + headerSize.y / 1.7);
     
     //RMS outline
-    stroke(lighterLines);
-    noFill();
-    rect(pos.x - buttonSize.x * .4, pos.y + headerSize.y / 2 - 2, buttonSize.x * .1, (buttonSize.y - headerSize.y));
+    buffer.stroke(lighterLines);
+    buffer.noFill();
+    buffer.rect(-buttonSize.x * .4, headerSize.y / 2 - 2, buttonSize.x * .1, (buttonSize.y - headerSize.y));
     
     //Draw icon
     drawIcon();
@@ -79,41 +102,36 @@ class MusicButton{
     if(rms > 0){
       rms *= map(gain, GAIN_OFF, GAIN_ON, 0, 1);
       float rmsHeight = constrain((buttonSize.y - headerSize.y) * (rms * 4), 0, (buttonSize.y - headerSize.y));
-      color c = lerpColor(colors.white, highlight, rmsHeight / (buttonSize.y - headerSize.y));
-      fill(c);
-      noStroke();
-      rect(pos.x - buttonSize.x * .4, pos.y - rmsHeight / 2 + buttonSize.y / 2 - 2, buttonSize.x * .1, -rmsHeight);
+      buffer.fill(colors.white);
+      buffer.noStroke();
+      buffer.rect(0 - buttonSize.x * .4, 0 - rmsHeight / 2 + buttonSize.y / 2 - 2, buttonSize.x * .1, -rmsHeight);
     }
+    
+    buffer.popMatrix();
+    buffer.endDraw();
+    needsUpdate = false;
   }
   
   void drawIcon(){
-    fill(hovered ? lighterLines + 100 : lighterLines);
-    noStroke();
+    buffer.fill(hovered ? lighterLines + 100 : lighterLines);
+    buffer.noStroke();
     if(gain != targetGain){
-      textSize(buttonSize.y * .3);
+      buffer.textSize(buttonSize.y * .3);
       String txt = "...";
-      float tw2 = textWidth(txt) / 2;
-      text(txt, pos.x - tw2, pos.y + buttonSize.y * .3);
+      tw2 = buffer.textWidth(txt) / 2;
+      buffer.text(txt, - tw2, buttonSize.y * .3);
     }else if(gain == GAIN_OFF){
-      if(audio != null){
-        float x1 = -buttonSize.x * .1;
-        float y1 = -buttonSize.y * .2;
-        float x2 = -buttonSize.x * .1;
-        float y2 = y1 * -1;
-        float x3 = x1 * -1;
-        float y3 = 0;
-        float hsy2 = headerSize.y / 2;
-        triangle(pos.x + x1, pos.y + y1 + hsy2, pos.x + x3, pos.y + y3 + hsy2, pos.x + x2, pos.y + y2 + hsy2);
-      }else{
-        fill(200, 0, 0);
-        textSize(buttonSize.y * .2);
-        String msg = "Could not\nload file";
-        float tw2 = textWidth(msg) / 2;
-        text(msg, pos.x - tw2, pos.y + headerSize.y / 3.5);
-      }
+      float x1 = -buttonSize.x * .1;
+      float y1 = -buttonSize.y * .2;
+      float x2 = -buttonSize.x * .1;
+      float y2 = y1 * -1;
+      float x3 = x1 * -1;
+      float y3 = 0;
+      float hsy2 = headerSize.y / 2;
+      buffer.triangle(x1, y1 + hsy2, x3, y3 + hsy2, x2, y2 + hsy2);
     }else{
-      rect(pos.x - buttonSize.x * .08, pos.y + headerSize.y / 2, buttonSize.x * .1, buttonSize.y * .4);
-      rect(pos.x + buttonSize.x * .08, pos.y + headerSize.y / 2, buttonSize.x * .1, buttonSize.y * .4);
+      buffer.rect(-buttonSize.x * .08, headerSize.y / 2, buttonSize.x * .1, buttonSize.y * .4);
+      buffer.rect(buttonSize.x * .08, headerSize.y / 2, buttonSize.x * .1, buttonSize.y * .4);
     }
   }
   
@@ -121,19 +139,24 @@ class MusicButton{
     if(audio != null){
       audio.setGain(gain + masterGain);
       if(gain != targetGain){
+        float ease = targetFrameRate == normalFrameRate ? GAIN_EASE : GAIN_EASE * (normalFrameRate / targetFrameRate);
         if(gain < targetGain){
-          gain += (targetGain - gain) * GAIN_EASE;
+          gain += (targetGain - gain) * ease;
         }else{
-          gain -= (gain * -GAIN_EASE) + GAIN_EASE;
+          gain -= (gain * -ease) + ease;
         }
         if(abs(gain - targetGain) < .5) {
           gain = targetGain;
           if(gain == GAIN_OFF){
             audio.pause();
+            audio.close();
+            audio = null;
+            triedLoading = false;
           }
         }
       }
-      return audio.mix.level();
+      if(audio != null) return audio.mix.level();
+      else return 0;
     }else{
       return 0;
     }
@@ -141,6 +164,7 @@ class MusicButton{
   
   void click(){
     if(rc.selected) return;
+    needsUpdate = true;
     if(targetGain == GAIN_OFF){
       for(MusicButton b: buttons){
         if(b == this) {
@@ -155,40 +179,44 @@ class MusicButton{
         sendSongToRemote("-");
       }
     }
+    needsUpdate = true;
   }
   
   void startPlayback(){
     targetGain = GAIN_ON;
+    if(audio == null && !triedLoading) loadMusicFile(url);
     if(audio != null && !audio.isPlaying()) audio.loop();
+    needsUpdate = true;
   }
   
   void stopPlayback(){
     targetGain = GAIN_OFF;
+    needsUpdate = true;
   }
   
-  void setPos(float x, float y){
-    acc = PVector.random2D().mult(20);
-    targetPos.set(x, y);
-  }
-  
-  boolean updateUnderMouse(){
-    hovered = (mouseX > pos.x - buttonSize.x / 2 && mouseX < pos.x + buttonSize.x / 2) && (mouseY > pos.y - buttonSize.y / 2 && mouseY < pos.y + buttonSize.y / 2);
-    return hovered;
+  boolean isUnderMouse(){
+    boolean isNowHovered = (mouseX > pos.x - buttonSize.x / 2 && mouseX < pos.x + buttonSize.x / 2) && (mouseY > pos.y - buttonSize.y / 2 && mouseY < pos.y + buttonSize.y / 2);
+    if(isNowHovered != hovered) needsUpdate = true;
+    return isNowHovered;
   }
   
   void loadFromDef(ButtonDef def){
     title = def.title;
     highlight = def.fill;
-    loadMusicFile(def.folder + def.url);
+    url = def.folder + def.url;
+    triedLoading = false;
   }
   
   void loadMusicFile(String url){
+    triedLoading = true;
     File soundFile = new File(url);
     if(!soundFile.exists()){
       println("Warning: Could not load soundfile: " + url);
       return;
     }
     this.url = url;
-    audio = minim.loadFile(url);
+    audio = minim.loadFile(url); 
+    if(audio != null) audio.setGain(GAIN_OFF);
+    needsUpdate = true;
   }
 }

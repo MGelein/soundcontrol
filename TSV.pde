@@ -26,3 +26,14 @@ ButtonDef parseLine(String line, String folder){
   def.folder = folder;
   return def;  
 }
+
+void handleNetworking(){
+  int now = millis();
+  if(now - lastUpdate > 2000){
+    lastUpdate = now;
+    checkRemote();
+  }else if(lastUpdate - now > 2000){
+    lastUpdate = now;
+    checkRemote();
+  }
+}
