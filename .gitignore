@@ -1,6 +1,0 @@
-data/*.mp3
-data/*.wav
-data/*.ogg
-data/*.mp4
-dist
-node_modules
