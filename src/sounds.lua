@@ -9,7 +9,8 @@ function sounds.prepareFiles()
         local sound = {
             file = f,
             source = sounds.getSource(f),
-            volume = 0
+            volume = 0,
+            state = 'loading'
         }
         sound.source:setVolume(0)
         sound.source:setLooping(true)
@@ -38,6 +39,15 @@ function sounds.update(dt)
             if not sound.source:isPlaying() then sound.source:play() end
         end
         sound.source:setVolume(newVolume)
+
+        if volumeDir == 1 then
+            sound.state = 'fade in'
+        elseif volumeDir == -1 then
+            sound.state = 'fade out'
+        else
+            if sound.source:isPlaying() then sound.state = 'playing'
+            else sound.state = 'stopped' end
+        end
     end
 end
 
@@ -50,7 +60,7 @@ end
 
 function sounds.toggle(sound)
     for i, otherSound in ipairs(sounds.list) do
-        otherSound.volume = 0
+        if sound ~= otherSound then otherSound.volume = 0 end
     end
     if sound.volume == 0 then sound.volume = 1
     else sound.volume = 0 end
