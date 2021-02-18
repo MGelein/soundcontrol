@@ -1,5 +1,7 @@
 sounds = {}
 sounds.list = {}
+sounds.fadeDuration = 2 -- 2 seconds
+sounds.fadeAmmount = 1 / sounds.fadeDuration
 
 function sounds.prepareFiles()
     local files = loader.getMusicFiles()
@@ -22,11 +24,15 @@ end
 function sounds.update(dt)
     for i, sound in ipairs(sounds.list) do
         local currentVolume = sound.source:getVolume()
-        local newVolume = currentVolume + (sound.volume - currentVolume) * dt
-        if newVolume < 0.01 then 
+        local volumeDir = 1
+        if currentVolume > sound.volume then volumeDir = -1
+        elseif currentVolume == sound.volume then volumeDir = 0 end
+
+        local newVolume = currentVolume + (volumeDir * sounds.fadeAmount) * dt
+        if newVolume < 0.0001 then 
             newVolume = 0
             if sound.source:isPlaying() then sound.source:stop() end
-        elseif newVolume > 0.99 then
+        elseif newVolume > 0.999 then
             newVolume = 1
         else
             if not sound.source:isPlaying() then sound.source:play() end
@@ -40,4 +46,9 @@ function sounds.get(file)
         if file == sound.file then return sound end
     end
     return nil
+end
+
+function sounds.toggle(sound)
+    if sound.volume == 0 then sound.volume = 1
+    else sound.volume = 0 end
 end

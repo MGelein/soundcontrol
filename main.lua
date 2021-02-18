@@ -16,3 +16,9 @@ function love.update(dt)
     sounds.update(dt)
     buttons.update()
 end
+
+function love.mousepressed(x, y, button, istouch, presses)
+    if button == 1 then
+        buttons.click(x, y)
+    end
+end

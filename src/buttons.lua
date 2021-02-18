@@ -61,3 +61,11 @@ function buttons.isOverButton(button, x, y)
         return false
     end
 end
+
+function buttons.click(x, y)
+    for i, button in ipairs(buttons.list) do
+        if buttons.isOverButton(button, x, y) then
+            sounds.toggle(button.sound)
+        end
+    end
+end
