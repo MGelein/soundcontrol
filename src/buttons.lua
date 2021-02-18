@@ -15,7 +15,7 @@ function buttons.new(soundObject, index)
         x = 0,
         y = (index - 1) * buttons.spacing,
         sound = soundObject,
-        hover = false
+        hover = false,
     }
     table.insert(buttons.list, button)
 end
@@ -38,6 +38,8 @@ function buttons.update()
         else
             button.hover = false
         end
+        if button.sound.source:isPlaying() then button.playing = true
+        else button.playing = false end
     end
 end
 

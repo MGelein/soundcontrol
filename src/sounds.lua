@@ -1,7 +1,7 @@
 sounds = {}
 sounds.list = {}
 sounds.fadeDuration = 2 -- 2 seconds
-sounds.fadeAmmount = 1 / sounds.fadeDuration
+sounds.fadeAmount = 1 / sounds.fadeDuration
 
 function sounds.prepareFiles()
     local files = loader.getMusicFiles()
@@ -49,6 +49,9 @@ function sounds.get(file)
 end
 
 function sounds.toggle(sound)
+    for i, otherSound in ipairs(sounds.list) do
+        otherSound.volume = 0
+    end
     if sound.volume == 0 then sound.volume = 1
     else sound.volume = 0 end
 end
