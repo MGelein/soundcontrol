@@ -6,7 +6,9 @@ function love.load()
     color = {r = 0.4, g = 0.8, b = 1}
     sounds.prepareFiles()
     buttons.create()
-    love.graphics.setNewFont(20)
+
+    mainFont = love.graphics.newFont(20)
+    smallFont = love.graphics.newFont(16)
 end
 
 function love.draw()

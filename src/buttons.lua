@@ -58,8 +58,10 @@ function buttons.drawSingle(button)
     love.graphics.rectangle('line', 0, 0, buttons.width, buttons.height)
     buttons.drawIcon(button)
 
+    love.graphics.setFont(mainFont)
     love.graphics.print(button.sound.file, buttons.height, buttons.height * 0.2)
-    love.graphics.printf(button.sound.state, 0, buttons.height * 0.2, buttons.width - buttons.padding, 'right')
+    love.graphics.setFont(smallFont)
+    love.graphics.printf(button.sound.state, 0, buttons.height * 0.3, buttons.width - buttons.padding, 'right')
     love.graphics.pop()
 end
 
