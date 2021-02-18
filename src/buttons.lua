@@ -18,6 +18,7 @@ function buttons.new(soundObject, index)
         y = (index - 1) * buttons.spacing,
         sound = soundObject,
         hover = false,
+        alpha = 0,
     }
     if button.x > 0 then button.y = button.y - buttons.spacing end
     table.insert(buttons.list, button)
@@ -49,16 +50,45 @@ end
 function buttons.drawSingle(button)
     love.graphics.push()
     love.graphics.translate(button.x, button.y)
-    local alpha = buttons.getAlpha(button)
+    button.alpha = button.alpha + (buttons.getAlpha(button) - button.alpha) * 0.1
     love.graphics.setLineWidth(buttons.getLineWidth(button))
-    love.graphics.setColor(color.r / 3, color.g / 3, color.b / 3, alpha / 3)
+    love.graphics.setColor(color.r / 3, color.g / 3, color.b / 3, button.alpha / 3)
     love.graphics.rectangle('fill', 0, 0, buttons.width, buttons.height)
-    love.graphics.setColor(color.r, color.g, color.b, alpha)
+    love.graphics.setColor(color.r, color.g, color.b, button.alpha)
     love.graphics.rectangle('line', 0, 0, buttons.width, buttons.height)
+    buttons.drawIcon(button)
 
-    love.graphics.print(button.sound.file, buttons.padding, buttons.height * 0.2)
+    love.graphics.print(button.sound.file, buttons.height, buttons.height * 0.2)
     love.graphics.printf(button.sound.state, 0, buttons.height * 0.2, buttons.width - buttons.padding, 'right')
     love.graphics.pop()
+end
+
+function buttons.drawIcon(button)
+    love.graphics.push()
+    love.graphics.translate(buttons.height / 4, buttons.height / 4)
+    love.graphics.polygon('fill', buttons.getIcon(button, buttons.height / 2))
+    love.graphics.pop()
+end
+
+function buttons.getIcon(button, size)
+    local state = button.sound.state
+    if state == 'fade in' then
+        return {0, size,
+            size * 0.8, size /2,
+            size * 0.8, size}
+    elseif state == 'fade out' then
+        return {0,size/2,
+            size * 0.8, size,
+            0, size}
+    elseif state == 'playing' then
+        return {0,0,
+            size, 0,
+            size, size,
+            0, size}
+    else return {0,0, 
+            size * 0.8, size / 2,
+            0, size}
+    end
 end
 
 function buttons.getLineWidth(button)

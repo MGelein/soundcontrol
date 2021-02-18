@@ -3,7 +3,7 @@ require "src.sounds"
 require "src.buttons"
 
 function love.load()
-    color = {r = 0.2, g = 1, b = 0.2}
+    color = {r = 0.4, g = 0.8, b = 1}
     sounds.prepareFiles()
     buttons.create()
     love.graphics.setNewFont(20)
