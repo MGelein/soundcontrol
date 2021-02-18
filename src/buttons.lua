@@ -94,13 +94,14 @@ function buttons.getIcon(button, size)
 end
 
 function buttons.getLineWidth(button)
-    if button.hover then return 3
+    if button.hover then return 4
+    elseif button.sound.state ~= 'stopped' then return 3
     else return 2 end
 end
 
 function buttons.getAlpha(button)
     if button.hover then return 1
-    elseif button.state == 'playing' then return 0.9
+    elseif button.sound.state ~= 'stopped' then return 0.9
     else return 0.6 end
 end
 
