@@ -15,7 +15,7 @@ function buttons.new(soundObject, index)
     local button = {
         i = index,
         x = ((index + 1) % 2) * buttons.width,
-        y = (index - 1) * buttons.spacing,
+        y = math.floor((index / 2)) * buttons.spacing,
         sound = soundObject,
         hover = false,
         alpha = 0,
