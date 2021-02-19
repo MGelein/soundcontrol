@@ -1,8 +1,9 @@
 buttons = {}
 buttons.list = {}
 buttons.padding = 10
-buttons.spacing = 60
+buttons.spacing = 50
 buttons.width = 100
+buttons.numCols = 3
 buttons.topBar = buttons.spacing
 buttons.height = buttons.spacing - buttons.padding
 
@@ -15,18 +16,26 @@ end
 function buttons.new(soundObject, index)
     local button = {
         i = index,
-        x = ((index + 1) % 2) * buttons.width,
-        y = math.floor((index / 2)) * buttons.spacing,
+        x = buttons.toCol(index) * 100,
+        y = buttons.toRow(index) * buttons.spacing,
         sound = soundObject,
         hover = false,
         alpha = 0,
     }
-    if button.x > 0 then button.y = button.y - buttons.spacing end
+    -- if button.x > 0 then button.y = button.y - buttons.spacing end
     table.insert(buttons.list, button)
 end
 
+function buttons.toCol(index)
+    return (index - 1) % buttons.numCols
+end
+
+function buttons.toRow(index)
+    return math.floor((index - 1) / buttons.numCols)
+end
+
 function buttons.draw()
-    buttons.width = (love.graphics.getWidth() - buttons.padding * 3) / 2
+    buttons.width = (love.graphics.getWidth() - buttons.padding * (buttons.numCols + 1)) / buttons.numCols
 
     love.graphics.push()
     love.graphics.translate(buttons.padding, buttons.padding + buttons.topBar)
@@ -39,7 +48,7 @@ end
 function buttons.update()
     local mouseX, mouseY = love.mouse.getPosition()
     for i, button in ipairs(buttons.list) do
-        button.x = ((button.i + 1) % 2) * buttons.width + ((button.i + 1) % 2) * buttons.padding
+        button.x = buttons.toCol(button.i) * buttons.width + buttons.toCol(button.i) * buttons.padding
         if buttons.isOverButton(button, mouseX, mouseY) then
             button.hover = true	
         else
