@@ -61,12 +61,12 @@ function sounds.get(file)
     return nil
 end
 
-function sounds.toggle(sound)
-    remote.setFile(sound.file)
+function sounds.setVolume(sound)
     for i, otherSound in ipairs(sounds.list) do
         if sound ~= otherSound then otherSound.volume = 0 end
     end
+    
+    if sound == nil then return end
     if sound.source == nil then sound.source = sounds.getSource(sound.file) end
-    if sound.volume == 0 then sound.volume = 1
-    else sound.volume = 0 end
+    sound.volume = 1
 end

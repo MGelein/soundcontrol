@@ -6,7 +6,7 @@ function love.conf(t)
     t.window.minheight = 480
     t.window.borderless = false
     t.window.icon = 'data/icon.png'
-    t.window.title = 'SoundControl v.3'
+    t.window.title = 'SoundControl v3'
 
     t.modules.joystick = false
     t.modules.physics = false

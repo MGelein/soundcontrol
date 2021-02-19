@@ -3,6 +3,7 @@ buttons.list = {}
 buttons.padding = 10
 buttons.spacing = 60
 buttons.width = 100
+buttons.topBar = buttons.spacing
 buttons.height = buttons.spacing - buttons.padding
 
 function buttons.create()
@@ -28,7 +29,7 @@ function buttons.draw()
     buttons.width = (love.graphics.getWidth() - buttons.padding * 3) / 2
 
     love.graphics.push()
-    love.graphics.translate(buttons.padding, buttons.padding)
+    love.graphics.translate(buttons.padding, buttons.padding + buttons.topBar)
     for i, button in ipairs(buttons.list) do
         buttons.drawSingle(button)
     end
@@ -107,7 +108,7 @@ end
 
 function buttons.isOverButton(button, x, y)
     x = x - buttons.padding
-    y = y - buttons.padding
+    y = y - buttons.padding - buttons.topBar
     if x > button.x and x < button.x + buttons.width then
         if y > button.y and y < button.y + (buttons.spacing - buttons.padding) then
             return true
@@ -122,7 +123,11 @@ end
 function buttons.click(x, y)
     for i, button in ipairs(buttons.list) do
         if buttons.isOverButton(button, x, y) then
-            sounds.toggle(button.sound)
+            if button.sound.volume == 0 then
+                remote.setFile(button.sound.file)
+            else
+                remote.setFile('')
+            end
         end
     end
 end
