@@ -12,6 +12,7 @@ function love.load()
     titleFont = love.graphics.newFont(24)
     mainFont = love.graphics.newFont(20)
     smallFont = love.graphics.newFont(16)
+    smallerFont = love.graphics.newFont(12)
 end
 
 function love.draw()

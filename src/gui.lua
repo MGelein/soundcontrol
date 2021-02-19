@@ -20,6 +20,9 @@ function gui.draw()
     love.graphics.rectangle('line', gui.remote.x, gui.remote.y, gui.remote.w, gui.remote.h)
     love.graphics.setFont(smallFont)
     love.graphics.print('Remote: ' .. remote.getRole(), gui.remote.x + buttons.padding, gui.remote.y + buttons.padding)
+
+    love.graphics.setFont(smallerFont)
+    love.graphics.print('copyright 2021, Mees Gelein', 220, buttons.padding * 2 + 5)
 end
 
 function gui.update(dt)
