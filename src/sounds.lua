@@ -62,6 +62,7 @@ function sounds.get(file)
 end
 
 function sounds.toggle(sound)
+    remote.setFile(sound.file)
     for i, otherSound in ipairs(sounds.list) do
         if sound ~= otherSound then otherSound.volume = 0 end
     end

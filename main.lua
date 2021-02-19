@@ -1,6 +1,7 @@
 require "src.loader"
 require "src.sounds"
 require "src.buttons"
+require "src.remote"
 
 function love.load()
     color = {r = 0.4, g = 0.8, b = 1}
@@ -17,6 +18,7 @@ end
 
 function love.update(dt)
     sounds.update(dt)
+    remote.update(dt)
     buttons.update()
 end
 
