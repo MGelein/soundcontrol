@@ -3,7 +3,7 @@ buttons.list = {}
 buttons.padding = 10
 buttons.spacing = 50
 buttons.width = 100
-buttons.numCols = 3
+buttons.numCols = 3 
 buttons.topBar = buttons.spacing
 buttons.height = buttons.spacing - buttons.padding
 
@@ -18,6 +18,7 @@ function buttons.new(soundObject, index)
         i = index,
         x = buttons.toCol(index) * 100,
         y = buttons.toRow(index) * buttons.spacing,
+        title = sounds.getNameWithoutExtension(soundObject),
         sound = soundObject,
         hover = false,
         alpha = 0,
@@ -69,7 +70,7 @@ function buttons.drawSingle(button)
     buttons.drawIcon(button)
 
     love.graphics.setFont(mainFont)
-    love.graphics.print(button.sound.file, buttons.height, buttons.height * 0.2)
+    love.graphics.print(button.title, buttons.height, buttons.height * 0.2)
     love.graphics.setFont(smallFont)
     love.graphics.printf(button.sound.state, 0, buttons.height * 0.3, buttons.width - buttons.padding, 'right')
     love.graphics.pop()

@@ -70,3 +70,11 @@ function sounds.setVolume(sound)
     if sound.source == nil then sound.source = sounds.getSource(sound.file) end
     sound.volume = 1
 end
+
+function sounds.getNameWithoutExtension(sound)
+    local file = sound.file
+    for i, ext in ipairs(loader.acceptedFormats) do
+        file = file:gsub(ext, '')
+    end
+    return file
+end
