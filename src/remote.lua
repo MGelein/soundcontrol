@@ -27,9 +27,18 @@ end
 
 function remote.setFile(file)
     if remote.currentFile ~= file then
+        local shifted = love.keyboard.isDown('lshift') or love.keyboard.isDown('rshift')
         remote.currentFile = file
         if remote.isMaster then remote.setTrack(file) end
         local sound = sounds.get(remote.currentFile)
-        sounds.setVolume(sound)
+        sounds.setVolume(sound, shifted, 1)
     end
+end
+
+function remote.unsetFile(file)
+    local shifted = love.keyboard.isDown('lshift') or love.keyboard.isDown('rshift')
+    remote.currentFile = ''
+    if remote.isMaster then remote.setTrack('') end
+    local sound = sounds.get(file)
+    sounds.setVolume(sound, shifted, 0)
 end

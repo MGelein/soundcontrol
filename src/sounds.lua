@@ -30,9 +30,9 @@ function sounds.update(dt)
             local volumeDir = 1
             if currentVolume > sound.volume then volumeDir = -1
             elseif currentVolume == sound.volume then volumeDir = 0 end
-    
+
             local newVolume = currentVolume + (volumeDir * sounds.fadeAmount) * dt
-            if newVolume < 0.0001 then 
+            if newVolume < 0.0001 then
                 newVolume = 0
                 if sound.source:isPlaying() then sound.source:stop() end
             elseif newVolume > 0.999 then
@@ -41,7 +41,7 @@ function sounds.update(dt)
                 if not sound.source:isPlaying() then sound.source:play() end
             end
             sound.source:setVolume(newVolume)
-    
+
             if volumeDir == 1 then
                 sound.state = 'fade in'
             elseif volumeDir == -1 then
@@ -61,14 +61,18 @@ function sounds.get(file)
     return nil
 end
 
-function sounds.setVolume(sound)
-    for i, otherSound in ipairs(sounds.list) do
-        if sound ~= otherSound then otherSound.volume = 0 end
+function sounds.setVolume(sound, leaveOthers, volume)
+    leaveOthers = leaveOthers and true or false
+
+    if not leaveOthers then
+        for i, otherSound in ipairs(sounds.list) do
+            if sound ~= otherSound then otherSound.volume = 0 end
+        end
     end
-    
+
     if sound == nil then return end
     if sound.source == nil then sound.source = sounds.getSource(sound.file) end
-    sound.volume = 1
+    sound.volume = volume
 end
 
 function sounds.getNameWithoutExtension(sound)

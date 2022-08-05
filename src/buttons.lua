@@ -3,7 +3,7 @@ buttons.list = {}
 buttons.padding = 10
 buttons.spacing = 50
 buttons.width = 100
-buttons.numCols = 3 
+buttons.numCols = 3
 buttons.topBar = buttons.spacing
 buttons.height = buttons.spacing - buttons.padding
 
@@ -51,7 +51,7 @@ function buttons.update()
     for i, button in ipairs(buttons.list) do
         button.x = buttons.toCol(button.i) * buttons.width + buttons.toCol(button.i) * buttons.padding
         if buttons.isOverButton(button, mouseX, mouseY) then
-            button.hover = true	
+            button.hover = true
         else
             button.hover = false
         end
@@ -86,21 +86,21 @@ end
 function buttons.getIcon(button, size)
     local state = button.sound.state
     if state == 'fade in' then
-        return {0, size,
-            size * 0.8, size /2,
-            size * 0.8, size}
+        return { 0, size,
+            size * 0.8, size / 2,
+            size * 0.8, size }
     elseif state == 'fade out' then
-        return {0,size/2,
+        return { 0, size / 2,
             size * 0.8, size,
-            0, size}
+            0, size }
     elseif state == 'playing' then
-        return {0,0,
+        return { 0, 0,
             size, 0,
             size, size,
-            0, size}
-    else return {0,0, 
+            0, size }
+    else return { 0, 0,
             size * 0.8, size / 2,
-            0, size}
+            0, size }
     end
 end
 
@@ -136,7 +136,7 @@ function buttons.click(x, y)
             if button.sound.volume == 0 then
                 remote.setFile(button.sound.file)
             else
-                remote.setFile('')
+                remote.unsetFile(button.sound.file)
             end
         end
     end
