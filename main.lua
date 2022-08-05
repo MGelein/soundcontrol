@@ -27,7 +27,7 @@ function love.update(dt)
     buttons.update()
 end
 
-function love.mousepressed(x, y, button, istouch, presses)
+function love.mousepressed(x, y, button)
     if button == 1 then
         buttons.click(x, y)
         gui.click(x, y)

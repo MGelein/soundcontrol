@@ -59,12 +59,14 @@ function buttons.update()
 end
 
 function buttons.drawSingle(button)
+    local currentVolume = button.sound.source ~= nil and button.sound.source:getVolume() or 0
+
     love.graphics.push()
     love.graphics.translate(button.x, button.y)
     button.alpha = button.alpha + (buttons.getAlpha(button) - button.alpha) * 0.1
     love.graphics.setLineWidth(buttons.getLineWidth(button))
-    love.graphics.setColor(color.r / 3, color.g / 3, color.b / 3, button.alpha / 3)
-    love.graphics.rectangle('fill', 0, 0, buttons.width, buttons.height)
+    love.graphics.setColor(color.r / 3, color.g / 3, color.b / 3, button.alpha * 0.5)
+    love.graphics.rectangle('fill', 0, 0, buttons.width * currentVolume, buttons.height)
     love.graphics.setColor(color.r, color.g, color.b, button.alpha)
     love.graphics.rectangle('line', 0, 0, buttons.width, buttons.height)
     buttons.drawIcon(button)
