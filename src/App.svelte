@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { BaseDirectory } from "@tauri-apps/api/fs";
 	export let name: string;
 </script>
 
@@ -8,6 +9,10 @@
 		Visit the <a href="https://svelte.dev/tutorial">Svelte tutorial</a> to learn
 		how to build Svelte apps.
 	</p>
+	<audio
+		src="file://C:/Users/Mees/Documents/SoundControl3/melancholy.mp3"
+		controls
+	/>
 </main>
 
 <style>
