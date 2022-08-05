@@ -5,7 +5,7 @@ require "src.remote"
 require "src.gui"
 
 function love.load()
-    color = {r = 0.4, g = 0.8, b = 1}
+    color = { r = 0.4, g = 0.8, b = 1 }
     sounds.prepareFiles()
     buttons.create()
 
