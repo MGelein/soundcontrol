@@ -135,11 +135,9 @@ end
 function buttons.click(x, y)
     for i, button in ipairs(buttons.list) do
         if buttons.isOverButton(button, x, y) then
-            if button.sound.volume == 0 then
-                remote.setFile(button.sound.file)
-            else
-                remote.unsetFile(button.sound.file)
-            end
+            local shifted = love.keyboard.isDown('lshift') or love.keyboard.isDown('rshift')
+            local sound = sounds.get(button.sound.file)
+            sounds.setVolume(sound, shifted, 1)
         end
     end
 end

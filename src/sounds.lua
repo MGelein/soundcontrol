@@ -2,6 +2,7 @@ sounds = {}
 sounds.list = {}
 sounds.fadeDuration = 2 -- 2 seconds
 sounds.fadeAmount = 1 / sounds.fadeDuration
+sounds.masterVolume = 1
 
 function sounds.prepareFiles()
     local files = loader.getMusicFiles()
@@ -24,6 +25,7 @@ function sounds.getSource(file)
 end
 
 function sounds.update(dt)
+    love.audio.setVolume(sounds.masterVolume)
     for i, sound in ipairs(sounds.list) do
         if sound.source then
             local currentVolume = sound.source:getVolume()
