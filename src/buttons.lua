@@ -137,7 +137,8 @@ function buttons.click(x, y)
         if buttons.isOverButton(button, x, y) then
             local shifted = love.keyboard.isDown('lshift') or love.keyboard.isDown('rshift')
             local sound = sounds.get(button.sound.file)
-            sounds.setVolume(sound, shifted, 1)
+            local targetVolume = button.sound.volume == 1 and 0 or 1
+            sounds.setVolume(sound, shifted, targetVolume)
         end
     end
 end
