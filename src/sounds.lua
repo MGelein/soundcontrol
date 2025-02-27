@@ -20,7 +20,7 @@ end
 function sounds.getSource(file)
     local source = love.audio.newSource(loader.dir .. '/' .. file, 'stream')
     source:setVolume(0)
-    source:setLooping(true)
+    -- source:setLooping(true)
     return source
 end
 
@@ -42,7 +42,7 @@ function sounds.update(dt)
             else
                 if not sound.source:isPlaying() then sound.source:play() end
             end
-            sound.source:setVolume(newVolume)
+            sound.source:setVolume(sound.volume)
 
             if volumeDir == 1 then
                 sound.state = 'fade in'

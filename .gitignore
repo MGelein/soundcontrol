@@ -3,3 +3,4 @@
 *.ogg
 *.dll
 .vscode
+dist/
